@@ -129,3 +129,23 @@ def update_user_profile(user_id: str, name: str = None, email: str = None, curre
 
     db.session.commit()
     return {"user": user.to_dict()}, 200
+
+def reset_password(email: str, new_password: str):
+    email = (email or "").strip().lower()
+    new_password = (new_password or "").strip()
+
+    if not email or not re.match(EMAIL_REGEX, email):
+        return {"error": "A valid registered email address is required."}, 400
+
+    if not new_password or len(new_password) < 6:
+        return {"error": "New password must be at least 6 characters long."}, 400
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        return {"error": "No account found with this email address."}, 404
+
+    user.set_password(new_password)
+    db.session.commit()
+
+    return {"message": "Password has been successfully updated."}, 200
+

@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  labelRight?: React.ReactNode;
   error?: string;
   helperText?: string;
   leftIcon?: React.ReactNode;
@@ -9,16 +10,22 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, helperText, leftIcon, rightIcon, className = '', id, ...props }, ref) => {
+  ({ label, labelRight, error, helperText, leftIcon, rightIcon, className = '', id, ...props }, ref) => {
     const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, '-') : undefined);
 
     return (
       <div className="w-full">
-        {label && (
-          <label htmlFor={inputId} className="block text-xs font-semibold uppercase tracking-wider text-surface-600 mb-1.5">
-            {label}
-          </label>
+        {(label || labelRight) && (
+          <div className="flex items-center justify-between mb-1.5">
+            {label ? (
+              <label htmlFor={inputId} className="block text-xs font-semibold uppercase tracking-wider text-surface-600">
+                {label}
+              </label>
+            ) : <div />}
+            {labelRight && <div>{labelRight}</div>}
+          </div>
         )}
+
         <div className="relative rounded-xl shadow-subtle">
           {leftIcon && (
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-400">

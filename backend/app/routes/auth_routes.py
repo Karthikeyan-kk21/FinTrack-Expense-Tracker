@@ -1,5 +1,5 @@
 from flask import Blueprint, request
-from app.services.auth_service import register_user, login_user, get_user_profile, update_user_profile
+from app.services.auth_service import register_user, login_user, get_user_profile, update_user_profile, reset_password
 from app.utils.auth_decorator import token_required
 from app.utils.error_handlers import success_response, error_response
 
@@ -62,3 +62,17 @@ def update_profile(current_user_id):
         return error_response(result.get("error", "Update profile failed"), code="UPDATE_ERROR", status_code=status_code)
 
     return success_response(data=result, message="Profile updated successfully")
+
+@auth_bp.route("/reset-password", methods=["POST"])
+@auth_bp.route("/forgot-password", methods=["POST"])
+def reset_user_password():
+    data = request.get_json() or {}
+    email = data.get("email")
+    new_password = data.get("new_password")
+
+    result, status_code = reset_password(email, new_password)
+    if status_code != 200:
+        return error_response(result.get("error", "Password reset failed"), code="RESET_ERROR", status_code=status_code)
+
+    return success_response(data=result, message=result.get("message", "Password reset successfully"))
+

@@ -37,6 +37,21 @@ def test_auth_registration_and_login(client):
     })
     assert bad_login.status_code == 401
 
+    # 5. Reset password
+    reset_res = client.post("/api/auth/reset-password", json={
+        "email": "alex@example.com",
+        "new_password": "newsuperpassword123"
+    })
+    assert reset_res.status_code == 200
+
+    # 6. Login with new password
+    new_login = client.post("/api/auth/login", json={
+        "email": "alex@example.com",
+        "password": "newsuperpassword123"
+    })
+    assert new_login.status_code == 200
+
+
 def test_default_categories_seeded_and_crud(client, auth_headers):
     # 1. Check categories were seeded
     cat_res = client.get("/api/categories", headers=auth_headers)

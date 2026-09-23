@@ -122,6 +122,14 @@ export const Login: React.FC = () => {
 
             <Input
               label="Password"
+              labelRight={
+                <Link
+                  to="/forgot-password"
+                  className="text-xs font-medium text-brand-600 hover:text-brand-500 transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              }
               type={showPassword ? 'text' : 'password'}
               placeholder="••••••••"
               value={password}
@@ -139,6 +147,7 @@ export const Login: React.FC = () => {
               autoComplete="current-password"
               required
             />
+
 
             <Button type="submit" className="w-full mt-2" size="lg" isLoading={isLoading}>
               Sign In

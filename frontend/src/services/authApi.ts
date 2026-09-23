@@ -28,4 +28,10 @@ export const authApi = {
     const res = await api.put<ApiResponse<{ user: User }>>('/auth/profile', payload);
     return res.data.data.user;
   },
+
+  resetPassword: async (payload: { email: string; new_password: string }): Promise<{ message: string }> => {
+    const res = await api.post<ApiResponse<{ message: string }>>('/auth/reset-password', payload);
+    return res.data.data;
+  },
 };
+
