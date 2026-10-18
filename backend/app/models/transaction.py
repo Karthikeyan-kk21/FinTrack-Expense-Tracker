@@ -4,6 +4,10 @@ from app.extensions import db
 
 class Transaction(db.Model):
     __tablename__ = "transactions"
+    __table_args__ = (
+        # Serves the filtered/sorted transaction list: WHERE user_id AND type AND date range ORDER BY date
+        db.Index("ix_transactions_user_type_date", "user_id", "type", "transaction_date"),
+    )
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     user_id = db.Column(db.String(36), db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
